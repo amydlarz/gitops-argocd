@@ -1,18 +1,37 @@
 # Setup HELM
-`helm repo add stable https://charts.helm.sh/stable`
+```bash
+helm repo add stable https://charts.helm.sh/stable
+```
 
-`helm repo update`
+```bash
+helm repo update
+```
 
-# ArgoCD deployment
+# ArgoCD installation
+```bash
+kubectl create namespace argocd
+```
 
+```bash
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
 
+Install ArgoCD CLI
+```bash
+brew install argocd
+````
 
-# TODO: readme.md
+Extract admin password
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
+```
 
-# TODO: argo
+Install ApplicationSet controller
+```bash
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/applicationset/v0.3.0/manifests/install.yaml
+```
 
-# TODO: helm test
-helm version
-version.BuildInfo{Version:"v3.15.4", GitCommit:"fa9efb07d9d8debbb4306d72af76a383895aa8c4", GitTreeState:"clean", GoVersion:"go1.22.6"}
-
-# TODO: helm release name
+Install Nginx Ingress controller
+```bash
+helm install nginx-ingress ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+```

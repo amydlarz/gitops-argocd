@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: spring-boot-api-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - environment: dev-global
+            cluster: dev-global-cluster-0
+            replica: '3'
+            profile: dev
+          - environment: prd-global
+            cluster: prd-global-cluster-5
+            replica: '5'
+            profile: prd
+  template:
+    metadata:
+      name: '{{environment}}-spring-boot-api'
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/amydlarz/helm-charts.git'
+        targetRevision: main
+        path: spring-boot-api
+        helm:
+          parameters:
+            - name: replicaCount
+              value: '{{replica}}'
+            - name: springProfilesActive
+              value: '{{profile}}'
+            - name: 'ingress.subdomain'
+              value: '{{environment}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{environment}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

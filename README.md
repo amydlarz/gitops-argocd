@@ -1,37 +1,13 @@
-# Setup HELM
-```bash
-helm repo add stable https://charts.helm.sh/stable
-```
+# Helm Chart Deployment with ArgoCD
 
-```bash
-helm repo update
-```
+Welcome to the repository for deploying Helm charts with ArgoCD.
 
-# ArgoCD installation
-```bash
-kubectl create namespace argocd
-```
+## Overview
 
-```bash
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
+This repository contains configurations and resources for deploying your Helm chart using ArgoCD. The Helm chart is sourced from a public repository and is designed to simplify the deployment process to your Kubernetes cluster using an `ApplicationSet`.
 
-Install ArgoCD CLI
-```bash
-brew install argocd
-````
+# Contributing
+If you have any suggestions or improvements, please feel free to submit a pull request or open an issue in this repository.
 
-Extract admin password
-```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
-```
-
-Install ApplicationSet controller
-```bash
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/applicationset/v0.3.0/manifests/install.yaml
-```
-
-Install Nginx Ingress controller
-```bash
-helm install nginx-ingress ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
-```
+# License
+This project is licensed under the MIT License. See the LICENSE file for details.
